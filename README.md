@@ -15,3 +15,13 @@
    
 3. networkmodel.py
    The agent-based network model used in Main.py / Main_update.py.
+   
+4. myGA.py
+   Self coded Genetic Algorithm, but didn't be used in the fittings (used package instead).
+   Not used in Main.py / Main_update.py.
+
+5. oneVSmulti_demo.py
+   A demo showing the advantages of multiprocessing. Not used in Main.py / Main_update.py.
+   
+6. XXX_fitting.csv
+   Image analysis data used in the toxicity fittings.
