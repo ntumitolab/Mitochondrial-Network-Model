@@ -15,5 +15,3 @@
    
 3. networkmodel.py
    The agent-based network model used in Main.py / Main_update.py.
-
-4. 
