@@ -31,3 +31,17 @@
    
 8. plot_demo.ipynb
    python codes for plotting the boxplot of the results of image analysis (csv from image_processing_macro)
+   
+9. netinfo_plotting.ipynb
+   python code for plotting the simulated network (agent-based).
+  
+  
+Workflow:
+
+1. Raw images (fluorescent images of mitochondria)
+2. Use ImageJ (FIJI) to run the preprocessing (codes in image_processing_macro.txt), and you will get the csv outputs. of image analysis.
+3. Use plot_demo to plot the result in step 2.
+4. Extract Ng1/N, Ng2/N, AvgDeg information from step 2, saved them as the form of XXX_fitting.csv.
+5. Run Main.py for glucose fitting (XXX_fitting.csv is needed, for example 0X_fitting.csv, 3X_fitting.csv etc.), and run Main_update.py for toxicity fitting (XXX_fitting.csv is needed, for example FCCP_fitting.csv, control_fitting.csv etc.) to get the answer of C1, C2 by GA.
+6. Run step 5. several times and manually collect the results (i.e. several C1, C2), which could be used for further analysis.
+7. For example, you could calculate the mean value of C1, C2 for each condition, and use netinfo_plotting.ipynb to plot the simulated network (agent-based, 11 reactions)
