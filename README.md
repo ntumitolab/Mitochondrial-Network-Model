@@ -45,3 +45,19 @@ Workflow:
 5. Run Main.py for glucose fitting (XXX_fitting.csv is needed, for example 0X_fitting.csv, 3X_fitting.csv etc.), and run Main_update.py for toxicity fitting (XXX_fitting.csv is needed, for example FCCP_fitting.csv, control_fitting.csv etc.) to get the answer of C1, C2 by GA.
 6. Run step 5. several times and manually collect the results (i.e. several C1, C2), which could be used for further analysis.
 7. For example, you could calculate the mean value of C1, C2 for each condition, and use netinfo_plotting.ipynb to plot the simulated network (agent-based, 11 reactions)
+
+
+Dependency:
+python:3.8.5
+
+Package:
+1. numpy
+2. pandas
+3. matplolib
+4. seaborn
+5. multiprocessing
+6. time
+7. sklearn
+8. scipy
+9. geneticalgorithm v1.0.2
+10. networkx
