@@ -1,4 +1,4 @@
-# Mitochondrial-Network-Model
+# Mitochondrial Network Model
 
 
 1. Main.py / Main_update.py
