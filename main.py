@@ -132,10 +132,10 @@ def run(
 if __name__ == "__main__":
 
     # create true answer from image analysis
-    run("data/2D_glucose/0X_fitting.csv")
-    run("data/2D_glucose/1X_fitting.csv")
-    run("data/2D_glucose/3X_fitting.csv")
-    run("data/2D_glucose/6X_fitting.csv")
+    # run("data/2D_glucose/0X_fitting.csv")
+    # run("data/2D_glucose/1X_fitting.csv")
+    # run("data/2D_glucose/3X_fitting.csv")
+    # run("data/2D_glucose/6X_fitting.csv")
 
     gaargs = {
         "max_num_iteration": 20,
