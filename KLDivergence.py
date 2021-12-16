@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
-import seaborn as sns; sns.set()
+import seaborn as sns
+
+sns.set()
 import numpy as np
 from sklearn.neighbors import KernelDensity
 from sklearn.model_selection import GridSearchCV
@@ -7,43 +9,46 @@ from sklearn.model_selection import LeaveOneOut
 from scipy.stats import entropy
 from scipy import stats
 
-def KDE1V(x, variable_name, bw_type = 'grid', plot='T'):
-    if bw_type == 'grid':
+
+def KDE1V(x, variable_name, bw_type="grid", plot="T"):
+    if bw_type == "grid":
         bandwidths = 10 ** np.linspace(-1, 1, 100)
-        
-        grid = GridSearchCV(KernelDensity(kernel='gaussian'),
-                            {'bandwidth': bandwidths},
-                            cv=LeaveOneOut())
+
+        grid = GridSearchCV(
+            KernelDensity(kernel="gaussian"),
+            {"bandwidth": bandwidths},
+            cv=LeaveOneOut(),
+        )
         grid.fit(x[:, None])
-        bw = grid.best_params_['bandwidth']
-            # instantiate and fit the KDE model
-        kde = KernelDensity(bandwidth=bw, kernel='gaussian')
+        bw = grid.best_params_["bandwidth"]
+        # instantiate and fit the KDE model
+        kde = KernelDensity(bandwidth=bw, kernel="gaussian")
         kde.fit(x[:, None])
 
-        if variable_name == 'AvgDeg':
+        if variable_name == "AvgDeg":
             xmin = 0
             xmax = 3
-        if variable_name == 'Ng1/N':
+        if variable_name == "Ng1/N":
             xmin = 0
             xmax = 1
-        if variable_name == 'Ng2/N':
+        if variable_name == "Ng2/N":
             xmin = 0
-            xmax = 1  
+            xmax = 1
 
-        X= np.mgrid[xmin:xmax:100j]
+        X = np.mgrid[xmin:xmax:100j]
         positions = np.vstack([X.ravel()])
         gdens = np.exp(kde.score_samples(positions.T))
-        
-    elif bw_type == 'silverman':
-        if variable_name == 'AvgDeg':
+
+    elif bw_type == "silverman":
+        if variable_name == "AvgDeg":
             xmin = 0
             xmax = 3
-        if variable_name == 'Ng1/N':
+        if variable_name == "Ng1/N":
             xmin = 0
             xmax = 1
-        if variable_name == 'Ng2/N':
+        if variable_name == "Ng2/N":
             xmin = 0
-            xmax = 1  
+            xmax = 1
 
         X = np.mgrid[xmin:xmax:100j]
         positions = np.vstack([X.ravel()])
@@ -52,17 +57,13 @@ def KDE1V(x, variable_name, bw_type = 'grid', plot='T'):
 
         kde = stats.gaussian_kde(x)
 
-        kde.set_bandwidth(bw_method='silverman')
+        kde.set_bandwidth(bw_method="silverman")
         gdens = kde(positions).T
 
-
-        
     else:
-        print('Wrong bw_type')
-        
+        print("Wrong bw_type")
 
-
-    # if plot == 'T': 
+    # if plot == 'T':
     #     fig = plt.figure(figsize=(12,10))
     #     ax = fig.add_subplot(111)
     #     ax.imshow(np.rot90(Z), cmap=plt.get_cmap('viridis'),
@@ -73,29 +74,30 @@ def KDE1V(x, variable_name, bw_type = 'grid', plot='T'):
     #     plt.show()
     # else:
     #     pass
-    
+
     return gdens
+
 
 # 1 variables KLD
 def KLD1V(gdens1, gdens2):
     if (0 in gdens1) or (0 in gdens2):
-        gdens1 = [gd+1e-100 for gd in gdens1]
-        gdens2 = [gd+1e-100 for gd in gdens2]
-    
-    if entropy(pk=gdens1, qk=gdens2,base=2) >= entropy(pk=gdens2, qk=gdens1,base=2):
-        return entropy(pk=gdens2, qk=gdens1,base=2)
+        gdens1 = [gd + 1e-100 for gd in gdens1]
+        gdens2 = [gd + 1e-100 for gd in gdens2]
+
+    if entropy(pk=gdens1, qk=gdens2, base=2) >= entropy(pk=gdens2, qk=gdens1, base=2):
+        return entropy(pk=gdens2, qk=gdens1, base=2)
     else:
-        return entropy(pk=gdens1, qk=gdens2,base=2)
+        return entropy(pk=gdens1, qk=gdens2, base=2)
 
 
-''' Old version of KLD1V
+""" Old version of KLD1V
 def KLD1V(gdens1, gdens2):
     return entropy(pk=gdens1, qk=gdens2,base=2)
 
-'''
+"""
 
 
-'''
+"""
 def KDE3V(x, y, z, bw_type = 'grid', plot='T'):
     xyz = np.vstack([x,y,z])
     if bw_type == 'grid':
@@ -262,4 +264,4 @@ def KLD1V(gdens1, gdens2):
     return entropy(pk=gdens1, qk=gdens2,base=2)
 
 
-'''
+"""

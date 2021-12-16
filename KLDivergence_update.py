@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
-import seaborn as sns; sns.set()
+import seaborn as sns
+
+sns.set()
 import numpy as np
 from sklearn.neighbors import KernelDensity
 from sklearn.model_selection import GridSearchCV
@@ -13,14 +15,14 @@ from scipy import stats
 #         Drop-in replacement for gaussian_kde that adds the class attribute EPSILON
 #         to the covmat eigenvalues, to prevent exceptions due to numerical error.
 #         """
-    
+
 #         EPSILON = 1e-10  # adjust this at will
-    
+
 #         def _compute_covariance(self):
 #             """Computes the covariance matrix for each Gaussian kernel using
 #             covariance_factor().
 #             """
-            
+
 #             self.factor = self.covariance_factor()
 #             # Cache covariance and inverse covariance of the data
 #             if not hasattr(self, '_data_inv_cov'):
@@ -39,18 +41,21 @@ from scipy import stats
 #             self._norm_factor = 2*np.log(np.diag(L)).sum()  # needed for scipy 1.5.2
 #             self.log_det = 2*np.log(np.diag(L)).sum()  # changed var name on 1.6.2
 
-def KDE3V(x, y, z, bw_type = 'grid', plot='T'):
-    xyz = np.vstack([x,y,z])
-    if bw_type == 'grid':
+
+def KDE3V(x, y, z, bw_type="grid", plot="T"):
+    xyz = np.vstack([x, y, z])
+    if bw_type == "grid":
         bandwidths = 10 ** np.linspace(-1, 1, 100)
-        
-        grid = GridSearchCV(KernelDensity(kernel='gaussian'),
-                            {'bandwidth': bandwidths},
-                            cv=LeaveOneOut())
+
+        grid = GridSearchCV(
+            KernelDensity(kernel="gaussian"),
+            {"bandwidth": bandwidths},
+            cv=LeaveOneOut(),
+        )
         grid.fit(xyz.T)
-        bw = grid.best_params_['bandwidth']
-            # instantiate and fit the KDE model
-        kde = KernelDensity(bandwidth=bw, kernel='gaussian')
+        bw = grid.best_params_["bandwidth"]
+        # instantiate and fit the KDE model
+        kde = KernelDensity(bandwidth=bw, kernel="gaussian")
         kde.fit(xyz.T)
 
         xmin = 0
@@ -63,8 +68,8 @@ def KDE3V(x, y, z, bw_type = 'grid', plot='T'):
         X, Y, Z = np.mgrid[xmin:xmax:100j, ymin:ymax:100j, zmin:zmax:100j]
         positions = np.vstack([X.ravel(), Y.ravel(), Z.ravel()])
         gdens = np.exp(kde.score_samples(positions.T))
-            
-    elif bw_type == 'silverman':
+
+    elif bw_type == "silverman":
         xmin = 0
         xmax = 3
         ymin = 0
@@ -75,37 +80,35 @@ def KDE3V(x, y, z, bw_type = 'grid', plot='T'):
         positions = np.vstack([X.ravel(), Y.ravel(), Z.ravel()])
 
         kde = stats.gaussian_kde(xyz)
-        kde.set_bandwidth(bw_method='scott')
+        kde.set_bandwidth(bw_method="scott")
         gdens = kde(positions).T
-            
-            
-    else:
-            print('Wrong bw_type')
-            
 
+    else:
+        print("Wrong bw_type")
 
     return gdens
+
 
 # def KDE3V(x, y, z, bw_type = 'grid', plot='T'):
 #     xyz = np.vstack([x,y,z])
 #     if bw_type == 'grid':
 #         bandwidths = 10 ** np.linspace(-1, 1, 100)
-        
+
 #         grid = GridSearchCV(KernelDensity(kernel='gaussian'),
 #                             {'bandwidth': bandwidths},
 #                             cv=LeaveOneOut())
 #         grid.fit(xyz.T)
 #         bw = grid.best_params_['bandwidth']
-        
+
 #     elif bw_type == 'silverman':
 #         d = xyz.shape[0]
 #         n = xyz.shape[1]
 #         bw = (n * (d + 2) / 4.)**(-1. / (d + 4))
-        
-        
+
+
 #     else:
 #         print('Wrong bw_type')
-        
+
 #     # instantiate and fit the KDE model
 #     kde = KernelDensity(bandwidth=bw, kernel='gaussian')
 #     kde.fit(xyz.T)
@@ -131,31 +134,32 @@ def KDE3V(x, y, z, bw_type = 'grid', plot='T'):
 
 # 2 variables KLD
 def KLD3V(gdens1, gdens2):
-    return entropy(pk=gdens1, qk=gdens2,base=2)
+    return entropy(pk=gdens1, qk=gdens2, base=2)
 
 
-def KDE2V(x, y, bw_type = 'grid', plot='T'):
-    xy = np.vstack([x,y])
-    if bw_type == 'grid':
+def KDE2V(x, y, bw_type="grid", plot="T"):
+    xy = np.vstack([x, y])
+    if bw_type == "grid":
         bandwidths = 10 ** np.linspace(-1, 1, 100)
-        
-        grid = GridSearchCV(KernelDensity(kernel='gaussian'),
-                            {'bandwidth': bandwidths},
-                            cv=LeaveOneOut())
+
+        grid = GridSearchCV(
+            KernelDensity(kernel="gaussian"),
+            {"bandwidth": bandwidths},
+            cv=LeaveOneOut(),
+        )
         grid.fit(xy.T)
-        bw = grid.best_params_['bandwidth']
-        
-    elif bw_type == 'silverman':
+        bw = grid.best_params_["bandwidth"]
+
+    elif bw_type == "silverman":
         d = xy.shape[0]
         n = xy.shape[1]
-        bw = (n * (d + 2) / 4.)**(-1. / (d + 4))
-        
-        
+        bw = (n * (d + 2) / 4.0) ** (-1.0 / (d + 4))
+
     else:
-        print('Wrong bw_type')
-        
+        print("Wrong bw_type")
+
     # instantiate and fit the KDE model
-    kde = KernelDensity(bandwidth=bw, kernel='gaussian')
+    kde = KernelDensity(bandwidth=bw, kernel="gaussian")
     kde.fit(xy.T)
 
     # xmin = x.min()
@@ -176,61 +180,66 @@ def KDE2V(x, y, bw_type = 'grid', plot='T'):
     gdens = np.exp(kde.score_samples(positions.T))
     Z = np.reshape(np.exp(kde.score_samples(positions.T)), X.shape)
 
-    if plot == 'T': 
-        fig = plt.figure(figsize=(12,10))
+    if plot == "T":
+        fig = plt.figure(figsize=(12, 10))
         ax = fig.add_subplot(111)
-        ax.imshow(np.rot90(Z), cmap=plt.get_cmap('viridis'),
-                  extent=[xmin, xmax, ymin, ymax])
+        ax.imshow(
+            np.rot90(Z), cmap=plt.get_cmap("viridis"), extent=[xmin, xmax, ymin, ymax]
+        )
 
-        ax.scatter(x, y, c='red', s=20, edgecolor='red')
-        #ax.set_aspect('auto')
+        ax.scatter(x, y, c="red", s=20, edgecolor="red")
+        # ax.set_aspect('auto')
         plt.show()
     else:
         pass
-    
+
     return gdens
+
 
 # 2 variables KLD
 def KLD2V(gdens1, gdens2):
-    return entropy(pk=gdens1, qk=gdens2,base=2)
+    return entropy(pk=gdens1, qk=gdens2, base=2)
 
-def KDE1V(x, variable_name, bw_type = 'grid', plot='T'):
-    if bw_type == 'grid':
+
+def KDE1V(x, variable_name, bw_type="grid", plot="T"):
+    if bw_type == "grid":
         bandwidths = 10 ** np.linspace(-1, 1, 100)
-        
-        grid = GridSearchCV(KernelDensity(kernel='gaussian'),
-                            {'bandwidth': bandwidths},
-                            cv=LeaveOneOut())
+
+        grid = GridSearchCV(
+            KernelDensity(kernel="gaussian"),
+            {"bandwidth": bandwidths},
+            cv=LeaveOneOut(),
+        )
         grid.fit(x[:, None])
-        bw = grid.best_params_['bandwidth']
-            # instantiate and fit the KDE model
-        kde = KernelDensity(bandwidth=bw, kernel='gaussian')
+        bw = grid.best_params_["bandwidth"]
+        # instantiate and fit the KDE model
+        kde = KernelDensity(bandwidth=bw, kernel="gaussian")
         kde.fit(x[:, None])
 
-        if variable_name == 'AvgDeg':
+        if variable_name == "AvgDeg":
             xmin = 0
             xmax = 3
-        if variable_name == 'Ng1/N':
+        if variable_name == "Ng1/N":
             xmin = 0
             xmax = 1
-        if variable_name == 'Ng2/N':
+        if variable_name == "Ng2/N":
             xmin = 0
-            xmax = 1  
+            xmax = 1
 
-        X= np.mgrid[xmin:xmax:100j]
+        X = np.mgrid[xmin:xmax:100j]
         positions = np.vstack([X.ravel()])
         gdens = np.exp(kde.score_samples(positions.T))
-        
-    elif bw_type == 'silverman':
-        if variable_name == 'AvgDeg':
+
+    elif bw_type == "silverman":
+        if variable_name == "AvgDeg":
             xmin = 0
             xmax = 3
-        if variable_name == 'Ng1/N':
+        if variable_name == "Ng1/N":
             xmin = 0
             xmax = 1
-        if variable_name == 'Ng2/N':
+        if variable_name == "Ng2/N":
             xmin = 0
-            xmax = 1  
+            xmax = 1
 
         X = np.mgrid[xmin:xmax:100j]
         positions = np.vstack([X.ravel()])
@@ -239,17 +248,13 @@ def KDE1V(x, variable_name, bw_type = 'grid', plot='T'):
 
         kde = stats.gaussian_kde(x)
 
-        kde.set_bandwidth(bw_method='silverman')
+        kde.set_bandwidth(bw_method="silverman")
         gdens = kde(positions).T
 
-
-        
     else:
-        print('Wrong bw_type')
-        
+        print("Wrong bw_type")
 
-
-    # if plot == 'T': 
+    # if plot == 'T':
     #     fig = plt.figure(figsize=(12,10))
     #     ax = fig.add_subplot(111)
     #     ax.imshow(np.rot90(Z), cmap=plt.get_cmap('viridis'),
@@ -260,9 +265,10 @@ def KDE1V(x, variable_name, bw_type = 'grid', plot='T'):
     #     plt.show()
     # else:
     #     pass
-    
+
     return gdens
+
 
 # 1 variables KLD
 def KLD1V(gdens1, gdens2):
-    return entropy(pk=gdens1, qk=gdens2,base=2)
+    return entropy(pk=gdens1, qk=gdens2, base=2)
