@@ -1,0 +1,14 @@
+name: mitodyn
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - numpy
+  - pandas
+  - matplolib
+  - seaborn
+  - pip
+  - scikit-learn
+  - scipy
+  - pip:
+    - geneticalgorithm
