@@ -5,7 +5,7 @@ dependencies:
   - python=3.8
   - numpy
   - pandas
-  - matplolib
+  - matplotlib
   - seaborn
   - pip
   - scikit-learn
