@@ -88,6 +88,7 @@ def run(
         "max_iteration_without_improv": 5,
     },
 ):
+    print(f"Number of CPU cores: {multiprocessing.cpu_count()}")
     start_time = time.time()
     # create true answer from image analysis
     fit_0 = pd.read_csv(datapath)
