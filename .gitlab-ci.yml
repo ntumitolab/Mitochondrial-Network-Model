@@ -1,0 +1,18 @@
+image: condaforge/mambaforge:latest
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - test
+  - deploy
+
+# before_script:
+
+test-run:
+  # Remove this tag if you want to use GitLab shared runners instead
+  tags:
+    - md705
+  stage: test
+  script:
+    - mamba env create -f environment.yml
+    - conda activate mitodyn
+    - python main.py
