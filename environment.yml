@@ -7,8 +7,9 @@ dependencies:
   - pandas
   - matplotlib
   - seaborn
-  - pip
+  - networkx
   - scikit-learn
   - scipy
+  - pip
   - pip:
     - geneticalgorithm
