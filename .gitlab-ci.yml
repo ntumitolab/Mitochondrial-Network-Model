@@ -14,6 +14,6 @@ test-run:
     - md705
   stage: test
   script:
-    - mamba env create -f environment.yml --yes
+    - mamba env create -f environment.yml
     - conda activate mitodyn
     - python main.py
