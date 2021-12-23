@@ -1,12 +1,32 @@
-image: condaforge/mambaforge:latest
+image: python:3.8-slim
 
-stages:          # List of stages for jobs, and their order of execution
+stages: # List of stages for jobs, and their order of execution
   - build
   - test
   - deploy
 
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+# Pip's cache doesn't store the python packages
+# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+#
+# If you want to also cache the installed packages, you have to install
+# them in a virtualenv and cache it as well.
+cache:
+  key:
+    files:
+      - requirements.txt
+  paths:
+    - .cache/pip
+    - venv/
+
 before_script:
-  - source ${CONDA_ROOT:=/opt/conda}/etc/profile.d/conda.sh
+  - python -m venv venv
+  - source venv/bin/activate
+  - pip install -r requirements.txt
 
 test-run:
   # Remove this tag if you want to use GitLab shared runners instead
@@ -14,6 +34,4 @@ test-run:
     - md705
   stage: test
   script:
-    - mamba env create -f environment.yml
-    - conda activate mitodyn
     - python main.py
