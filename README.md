@@ -1,9 +1,9 @@
 # Mitochondrial Network Model
 
 
-1. `main.py`
+1. `run.py`
    Main program to run the fitting process.
-   Use multiprocessing to speed up.
+   Multiprocessing is used to speed up.
    
 2. `KLDivergence.py` / `KLDivergence_update.py`
    Functions of KLD and KDE.
@@ -19,7 +19,7 @@
 5. `oneVSmulti_demo.py`
    A demo showing the advantages of multiprocessing. Not used in Main.py / Main_update.py.
    
-6. `XXX_fitting.csv`
+6. `data/XXX_fitting.csv`
    Image analysis data used in the toxicity fittings.
    
 7. `image_processing_macro.txt`
@@ -30,6 +30,9 @@
    
 9. `netinfo_plotting.ipynb`
    python code for plotting the simulated network (agent-based).
+
+10. `smalltest.py`
+   Small-scale test script for continuous integration to make sure the code could run.
   
   
 Workflow:
@@ -44,16 +47,15 @@ Workflow:
 
 
 Dependency:
-python:3.8.5
+python: 3.8+ (Current tested against Python 3.10)
 
-Package:
+Package: See `requirements.txt`
 1. numpy
 2. pandas
 3. matplolib
 4. seaborn
 5. multiprocessing
-6. time
 7. sklearn
 8. scipy
-9. geneticalgorithm v1.0.2
+9. geneticalgorithm
 10. networkx
