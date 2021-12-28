@@ -1,6 +1,6 @@
 image: python:3.8-slim
 
-stages: # List of stages for jobs, and their order of execution
+stages:
   - build
   - test
   - deploy
@@ -29,10 +29,21 @@ before_script:
   - python -m pip install -U pip wheel
   - pip install -r requirements.txt
 
-test-run:
+test-small:
   # Remove this tag if you want to use GitLab shared runners instead
   tags:
     - md705
   stage: test
   script:
-    - python main.py
+    - python smalltest.py
+
+test-full:
+  # Remove this tag if you want to use GitLab shared runners instead
+  tags:
+    - md705
+  stage: test
+  # Scheduled run only since one job will take 6 hours on our 32-core machine
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    - python run.py
