@@ -29,7 +29,7 @@ before_script:
   - python -m pip install -U pip wheel
   - pip install -r requirements.txt
 
-test-small:
+test:
   # Remove this tag if you want to use GitLab shared runners instead
   tags:
     - md705
@@ -37,13 +37,16 @@ test-small:
   script:
     - python smalltest.py
 
-test-full:
+run-all:
   # Remove this tag if you want to use GitLab shared runners instead
   tags:
     - md705
   stage: test
-  # Scheduled run only since one job will take 6 hours on our 32-core machine
+  # Scheduled run only since this job would take 6 hours on our 32-core machine
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   script:
     - python run.py
+  artifacts:
+    paths:
+      - data/*.txt  
