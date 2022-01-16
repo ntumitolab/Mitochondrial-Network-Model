@@ -1,15 +1,14 @@
-name: mitodyn
 channels:
   - conda-forge
 dependencies:
-  - python=3.8
-  - numpy
-  - pandas
-  - matplotlib
-  - seaborn
-  - networkx
-  - scikit-learn
-  - scipy
-  - pip
+  - python=3.10
+  - matplotlib=3.5.1
+  - networkx=2.6.3
+  - numpy=1.22.0
+  - pandas=1.3.5
+  - scikit-learn=1.0.2
+  - scipy=1.7.3
+  - seaborn=0.11.2
+  - pip=21.3.1
   - pip:
-    - geneticalgorithm
+      - geneticalgorithm==1.0.2
