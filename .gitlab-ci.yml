@@ -1,8 +1,7 @@
-image: condaforge/mambaforge:4.11.0-0
+image: python:3.9-slim
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
-  CONDA_PKGS_DIRS: "${CI_PROJECT_DIR}/.cache/conda/pkgs/"
   PIP_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/pip/"
 
 stages:
@@ -18,15 +17,15 @@ stages:
 cache:
   - key:
       files:
-        - environment.yml
+        - requirements.txt
     paths:
-      - .env/
-      - .cache/conda/pkgs/
-      - .cache/pip/
+      - venv/
+      - .cache/pip
 
 before_script:
-  - mamba env update --prefix ./.env --file environment.yml --prune
-  - source activate ./.env
+  - python -m venv venv/
+  - source venv/bin/activate
+  - python -m pip install -r requirements.txt
 
 test:
   # Remove this tag if you want to use GitLab shared runners instead
