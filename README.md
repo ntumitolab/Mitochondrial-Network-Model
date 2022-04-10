@@ -1,40 +1,42 @@
 # Mitochondrial Network Model
 
+By Ching-Hsian Chu
+
 
 1. `run.py`
    Main program to run the fitting process.
    Multiprocessing is used to speed up.
-   
+
 2. `KLDivergence.py` / `KLDivergence_update.py`
    Functions of KLD and KDE.
    KLDivergence is used in Main.py / Main_update.py, where KLDivergence_update.py still have some bugs with bandwidth of KDE.
-   
+
 3. `networkmodel.py`
    The agent-based network model used in Main.py / Main_update.py.
-   
+
 4. `myGA.py`
    Self coded Genetic Algorithm, but didn't be used in the fittings (used package instead).
    Not used in Main.py / Main_update.py.
 
 5. `oneVSmulti_demo.py`
    A demo showing the advantages of multiprocessing. Not used in Main.py / Main_update.py.
-   
+
 6. `data/XXX_fitting.csv`
    Image analysis data used in the toxicity fittings.
-   
+
 7. `image_processing_macro.txt`
    Codes of macro for image processing using ImageJ. Results in csv form would be outputted, which are used for Main.py / Main_update.py and plot_demo.ipynb.
-   
+
 8. `plot_demo.ipynb`
    python codes for plotting the boxplot of the results of image analysis (csv from image_processing_macro)
-   
+
 9. `netinfo_plotting.ipynb`
    python code for plotting the simulated network (agent-based).
 
 10. `smalltest.py`
    Small-scale test script for continuous integration to make sure the code could run.
-  
-  
+
+
 Workflow:
 
 1. Raw images (fluorescent images of mitochondria)
@@ -46,7 +48,8 @@ Workflow:
 7. For example, you could calculate the mean value of C1, C2 for each condition, and use netinfo_plotting.ipynb to plot the simulated network (agent-based, 11 reactions)
 
 
-Dependency:
+## Dependencies
+
 python: 3.8+ (Current tested against Python 3.10)
 
 Package: See `requirements.txt`
