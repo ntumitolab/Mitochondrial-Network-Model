@@ -50,7 +50,7 @@ Workflow:
 
 ## Dependencies
 
-python: 3.8+ (Current tested against Python 3.10)
+python: 3.8+ (Current tested against Python 3.11)
 
 Package: See `requirements.txt`
 1. numpy
