@@ -12,26 +12,25 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  PYTHON_VERSION: "3.11"
-
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python ${{ env.PYTHON_VERSION }}
+      - name: Setup Python
         uses: actions/setup-python@v5
+        id: cp
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      - name: Restore Python virtualenv
-        uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
-      - name: Download Pip cache
-        uses: syphar/restore-pip-download-cache@v1
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-      - name: Install Python dependencies if cache miss
+          python-version: '3.x'
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        id: cache-py
+        if: ${{ contains(runner.name, 'GitHub Actions') }}
+        with:
+          path: ${{ env.pythonLocation }}
+          key:  ${{ runner.os }}-pip-${{ steps.cp.outputs.python-version }}-${{ hashFiles('requirements.txt') }}
+      - name: Install pip dependencies if cache miss
+        if: ${{ steps.cache-py.outputs.cache-hit != 'true' }}
         run: pip install -r requirements.txt
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
       - name: Run Test
         run: python smalltest.py
