@@ -15,22 +15,18 @@ concurrency:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    env:
+      UV_SYSTEM_PYTHON: 1
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python
         uses: actions/setup-python@v5
-        id: cp
+        id: setup-python
         with:
           python-version: '3.x'
-      - name: Cache pip dependencies
-        uses: actions/cache@v4
-        id: cache-py
-        if: ${{ contains(runner.name, 'GitHub Actions') }}
-        with:
-          path: ${{ env.pythonLocation }}
-          key:  ${{ runner.os }}-pip-${{ steps.cp.outputs.python-version }}-${{ hashFiles('requirements.txt') }}
-      - name: Install pip dependencies if cache miss
-        if: ${{ steps.cache-py.outputs.cache-hit != 'true' }}
-        run: pip install -r requirements.txt
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Install Python dependencies
+        run: uv pip install -r requirements.txt
       - name: Run Test
-        run: python smalltest.py
+        run: uv run smalltest.py
